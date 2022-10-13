@@ -1,3 +1,4 @@
+# !{sys.executable} -m pip install numpy
 import numpy as np
 import matplotlib.pyplot as plt
 import sklearn.datasets as datasets
@@ -8,7 +9,7 @@ X, _ = datasets.make_blobs(n_samples=750, centers=centers, cluster_std=0.4,
 plt.scatter(X[:,0],X[:,1],s=10, alpha=0.8)
 plt.show()
 
-class DBC():
+class DBC():   
 
     def __init__(self, dataset, min_pts, epsilon):
         self.dataset = dataset
