@@ -46,12 +46,27 @@ class Node:
 def get_prediction(node, example):
     # example is a dictionary which holds the attributes and the
     # values of the attribute (ex. example[’X’] = 0)
+    if node is None:
+        return None
     if node.left is None and node.right is None:
         # leaf node
         return node.vote
     else:
         # your code here
-        return
+
+        # if example[node.attribute] == 0:
+        #     return self.get_prediction(node.left, example)
+        # if example[node.attribute] == 1:
+        #     return self.get_prediction(node.right, example)
+
+        if node.left is None:
+            return get_prediction(node.right, example)
+        elif node.right is None:
+            return get_prediction(node.left, example)
+        else:
+            left =  get_prediction(node.left, example)
+            # right = get_prediction(node.right, example)
+            return left
 
 
 class SimpleDecisionTree:
@@ -72,7 +87,16 @@ class SimpleDecisionTree:
 
 
     def gini_split(self, data, attr):
-        # compute the gini of the split on attr
+        def gini(node):
+            freq_1 = sum(node) / len(node)
+            frequencies = [ freq_1, 1-freq_1 ]
+            return 1 - sum(map(lambda x : x**2, frequencies))
+
+        ginis = list(map(lambda x: gini(x["node"]), data))
+        lens = list(map(lambda x: len(x["node"]), data))
+        total = sum(lens)
+        weighted_ginis = list(map(lambda x: x[0] * x[1], zip(lens, ginis)))
+        return sum(weighted_ginis)/total        
         pass
     
 
@@ -83,6 +107,8 @@ class SimpleDecisionTree:
 
     def is_pure(data, target_name):
         # returns true if all data has the same target value
+        statement = True
+
         pass
 
     def get_best_attribute(self, data):
@@ -94,8 +120,8 @@ class SimpleDecisionTree:
 
     
     def get_subset(self, data, attr):
-        left = ... # return the rows of the dataset where attribute == 1
-        right = ... # return the rows of the dataset where attribute == 0
+        left = [x for x in data if attr==1] # return the rows of the dataset where attribute == 1
+        right = [x for x in data if attr==1] # return the rows of the dataset where attribute == 0
         return left, right
 
 
